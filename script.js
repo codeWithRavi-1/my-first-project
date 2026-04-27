@@ -1,28 +1,30 @@
-// SEARCH functionality
-const searchInput = document.getElementById("search");
-const filterBtns = document.querySelectorAll(".filter-btn");
-const recipeCards = document.querySelectorAll(".recipe-card");
-const modal = document.getElementById("recipe-modal");
-const modalTitle = document.getElementById("modal-title");
-const modalDesc = document.getElementById("modal-description");
-const closeBtn = document.querySelector(".close-btn");
-const darkToggle = document.getElementById("dark-toggle");
-const form = document.getElementById("recipe-form");
-const recipes = [...document.querySelectorAll(".recipe-card")];
+// 🌙 DARK MODE
+document.getElementById("dark-toggle").onclick = () => {
+  document.body.classList.toggle("dark");
+};
 
+// 📦 ELEMENTS
+const searchInput = document.getElementById("search");
+const recipeCards = document.querySelectorAll(".recipe-card");
+const filterBtns = document.querySelectorAll(".filter-btn");
+
+// 🔍 SEARCH FUNCTION
 searchInput.addEventListener("input", () => {
-  const query = searchInput.value.toLowerCase();
-  recipes.forEach(card => {
-    const title = card.getAttribute("data-title").toLowerCase();
-    card.style.display = title.includes(query) ? "block" : "none";
+  const value = searchInput.value.toLowerCase();
+
+  document.querySelectorAll(".recipe-card").forEach(card => {
+    const title = card.dataset.title.toLowerCase();
+    card.style.display = title.includes(value) ? "block" : "none";
   });
 });
 
+// 🎯 FILTER FUNCTION
 filterBtns.forEach(btn => {
   btn.addEventListener("click", () => {
-    const category = btn.getAttribute("data-category");
-    recipes.forEach(card => {
-      if (category === "all" || card.getAttribute("data-category") === category) {
+    const category = btn.dataset.category;
+
+    document.querySelectorAll(".recipe-card").forEach(card => {
+      if (category === "all" || card.dataset.category === category) {
         card.style.display = "block";
       } else {
         card.style.display = "none";
@@ -31,145 +33,100 @@ filterBtns.forEach(btn => {
   });
 });
 
-recipeCards.forEach(card => {
+// 📖 RECIPE MODAL
+const modal = document.getElementById("recipe-modal");
+const modalTitle = document.getElementById("modal-title");
+const modalDesc = document.getElementById("modal-description");
+const closeBtn = document.querySelector(".close-btn");
+
+document.querySelectorAll(".recipe-card").forEach(card => {
   card.addEventListener("click", () => {
-    modalTitle.textContent = card.getAttribute("data-title");
-    modalDesc.textContent = card.getAttribute("data-description");
-    modal.style.display = "block";
+    modal.style.display = "flex";
+    modalTitle.innerText = card.dataset.title;
+    modalDesc.innerText = card.dataset.description;
   });
 });
 
-closeBtn.addEventListener("click", () => {
-  modal.style.display = "none";
-});
+closeBtn.onclick = () => modal.style.display = "none";
 
-darkToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
-});
+// ➕ ADD RECIPE
+const form = document.getElementById("recipe-form");
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
+
   const title = document.getElementById("title").value;
   const category = document.getElementById("category").value.toLowerCase();
   const cooktime = document.getElementById("cooktime").value;
   const image = document.getElementById("image").value;
   const description = document.getElementById("description").value;
 
-  const newCard = document.createElement("section");
-  newCard.className = "recipe-card";
-  newCard.setAttribute("data-category", category);
-  newCard.setAttribute("data-title", title);
-  newCard.setAttribute("data-description", description);
+  const newCard = document.createElement("article");
+  newCard.classList.add("recipe-card");
+  newCard.dataset.category = category;
+  newCard.dataset.title = title;
+  newCard.dataset.description = description;
+
   newCard.innerHTML = `
-    <h2>${title}</h2>
-    <img src="${image}" alt="${title}" />
-    <p><strong>Category:</strong> ${category}</p>
-    <p><strong>Cook Time:</strong> ${cooktime}</p>
+    <img src="${image}" alt="${title}">
+    <div class="recipe-info">
+      <h2>${title}</h2>
+      <p><strong>Category:</strong> ${category}</p>
+      <p><strong>Cook Time:</strong> ${cooktime}</p>
+    </div>
   `;
 
   document.getElementById("recipe-list").appendChild(newCard);
-  recipes.push(newCard);
 
+  // Add modal click to new card
   newCard.addEventListener("click", () => {
-    modalTitle.textContent = title;
-    modalDesc.textContent = description;
-    modal.style.display = "block";
+    modal.style.display = "flex";
+    modalTitle.innerText = title;
+    modalDesc.innerText = description;
   });
 
   form.reset();
 });
 
-// ===============================
-// AI RECIPE GENERATOR FUNCTIONALITY
-// ===============================
+// 🤖 AI MODAL
+const aiModal = document.getElementById("ai-recipe-modal");
+const openAiBtn = document.getElementById("open-ai-modal");
+const closeAiBtn = document.querySelector(".close-ai-btn");
 
-const aiModal = document.getElementById('ai-recipe-modal');
-const openAIModal = document.getElementById('open-ai-modal');
-const closeAIBtn = document.querySelector('.close-ai-btn');
-const getRecipeBtn = document.getElementById('get-recipe-btn');
-const ingredientInput = document.getElementById('ingredientInput');
-const recipeResult = document.getElementById('recipeResult');
+openAiBtn.onclick = () => {
+  aiModal.style.display = "flex";
+};
 
-// Open AI Modal
-openAIModal.addEventListener('click', () => {
-  aiModal.style.display = 'block';
-  recipeResult.innerHTML = '';
-  ingredientInput.value = '';
-});
+closeAiBtn.onclick = () => {
+  aiModal.style.display = "none";
+};
 
-// Close AI Modal
-closeAIBtn.addEventListener('click', () => {
-  aiModal.style.display = 'none';
-});
+// 🧠 AI RECIPE GENERATOR (Demo version)
+document.getElementById("get-recipe-btn").onclick = () => {
+  const input = document.getElementById("ingredientInput").value;
+  const result = document.getElementById("recipeResult");
 
-// Close on outside click
-window.addEventListener('click', (e) => {
-  if (e.target === aiModal) {
-    aiModal.style.display = 'none';
+  if (!input) {
+    result.innerHTML = "⚠️ Please enter ingredients!";
+    return;
   }
-});
 
-// Typing animation function
-function typeWriterEffect(element, text, speed = 20) {
-  element.innerHTML = "";
-  let i = 0;
-  function type() {
-    if (i < text.length) {
-      element.innerHTML += text.charAt(i);
-      i++;
-      setTimeout(type, speed);
-    }
-  }
-  type();
-}
+  // Fake AI response (for demo)
+  result.innerHTML = `
+    <h3>🍽️ Recipe Idea</h3>
+    <p><strong>Ingredients:</strong> ${input}</p>
+    <p><strong>Steps:</strong></p>
+    <ol>
+      <li>Prepare ingredients</li>
+      <li>Cook on medium heat</li>
+      <li>Add spices and mix well</li>
+      <li>Serve hot and enjoy 😋</li>
+    </ol>
+  `;
+};
 
-// Fetch AI Recipe
-getRecipeBtn.addEventListener('click', async () => {
-  const ingredients = ingredientInput.value.trim();
-  if (!ingredients) return;
-
-  recipeResult.innerHTML = '⏳ Generating recipe...';
-
-  try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer your api key"  },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "user",
-            content: `Suggest a detailed recipe using these ingredients: ${ingredients}`
-          }
-        ],
-        temperature: 0.7
-      }),
-    });
-
-    const data = await response.json();
-    const aiText = data.choices?.[0]?.message?.content || "❌ No recipe found.";
-    typeWriterEffect(recipeResult, aiText);
-  } catch (err) {
-    recipeResult.innerHTML = "⚠️ Error fetching recipe. Please try again.";
-
-  }
-  document.addEventListener("DOMContentLoaded", () => {
-    // All your existing code here
-    // SEARCH functionality
-    const searchInput = document.getElementById("search");
-    const filterBtns = document.querySelectorAll(".filter-btn");
-    const recipeCards = document.querySelectorAll(".recipe-card");
-    const modal = document.getElementById("recipe-modal");
-    const modalTitle = document.getElementById("modal-title");
-    const modalDesc = document.getElementById("modal-description");
-    const closeBtn = document.querySelector(".close-btn");
-    const darkToggle = document.getElementById("dark-toggle");
-    const form = document.getElementById("recipe-form");
-    const recipes = [...document.querySelectorAll(".recipe-card")];
-  
-    // ... rest of your code untouched
-  });
-  
-});
+// ❌ CLOSE MODAL ON OUTSIDE CLICK
+window.onclick = (e) => {
+  if (e.target === modal) modal.style.display = "none";
+  if (e.target === aiModal) aiModal.style.display = "none";
+};

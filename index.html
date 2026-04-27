@@ -3,14 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Yummy Recipes</title>
+  <title>🍽️ Yummy Recipes</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
-  <header>
-    <h1>Yummy Recipes</h1>
+
+  <!-- 🔝 HEADER -->
+  <header class="header">
+    <h1>🍽️ Yummy Recipes</h1>
+
     <nav>
-      <ul>
+      <ul class="nav-links">
         <li><a href="#">Home</a></li>
         <li><a href="#">Breakfast</a></li>
         <li><a href="#">Lunch</a></li>
@@ -18,58 +22,91 @@
       </ul>
     </nav>
 
+    <!-- 🔍 Search -->
     <div class="search-container">
-      <input type="text" id="search" placeholder="Search recipes..." />
+      <input type="text" id="search" placeholder="🔍 Search recipes..." />
     </div>
 
-    <div class="filter-buttons">
-      <button class="filter-btn" data-category="all">All</button>
-      <button class="filter-btn" data-category="breakfast">Breakfast</button>
-      <button class="filter-btn" data-category="lunch">Lunch</button>
-      <button class="filter-btn" data-category="desserts">Desserts</button>
+    <!-- 🎯 Filters -->
+    <div class="controls">
+      <div class="filter-buttons">
+        <button class="filter-btn" data-category="all">All</button>
+        <button class="filter-btn" data-category="breakfast">Breakfast</button>
+        <button class="filter-btn" data-category="lunch">Lunch</button>
+        <button class="filter-btn" data-category="desserts">Desserts</button>
+      </div>
+
+      <!-- 🌙 Dark Mode -->
+      <button id="dark-toggle">🌙 Dark Mode</button>
+
+      <!-- 🤖 AI Button -->
+      <button id="open-ai-modal" class="ai-btn">🤖 AI Generator</button>
     </div>
-    <button id="dark-toggle">🌙 Toggle Dark Mode</button>
   </header>
 
-  <main id="recipe-list">
-    <section class="recipe-card" data-category="lunch" data-title="Spaghetti Carbonara" data-description="1. Boil pasta. 2. Cook bacon until crispy. 3. Mix eggs, cheese, and pepper. 4. Toss everything together while hot. 5. Serve with extra cheese.">
-      <h2>Spaghetti Carbonara</h2>
+  <!-- 📋 RECIPE LIST -->
+  <main id="recipe-list" class="recipe-grid">
+
+    <!-- 🍝 Recipe Card -->
+    <article class="recipe-card"
+      data-category="lunch"
+      data-title="Spaghetti Carbonara"
+      data-description="1. Boil pasta. 2. Cook bacon. 3. Mix eggs & cheese. 4. Combine all. 5. Serve.">
+
       <img src="spaghetti.jpg" alt="Spaghetti Carbonara" />
-      <p><strong>Category:</strong> Lunch</p>
-      <p><strong>Cook Time:</strong> 20 min</p>
-    </section>
+      <div class="recipe-info">
+        <h2>Spaghetti Carbonara</h2>
+        <p><strong>Category:</strong> Lunch</p>
+        <p><strong>Cook Time:</strong> 20 min</p>
+      </div>
+    </article>
 
-    <section class="recipe-card" data-category="breakfast" data-title="Pancakes" data-description="1. Mix flour, milk, egg, sugar, and baking powder. 2. Heat a pan and pour batter. 3. Flip when bubbles appear. 4. Serve with syrup or fruit.">
-      <h2>Pancakes</h2>
+    <!-- 🥞 Recipe Card -->
+    <article class="recipe-card"
+      data-category="breakfast"
+      data-title="Pancakes"
+      data-description="1. Mix ingredients. 2. Pour batter. 3. Flip. 4. Serve.">
+
       <img src="pancakes.jpg" alt="Pancakes" />
-      <p><strong>Category:</strong> Breakfast</p>
-      <p><strong>Cook Time:</strong> 15 min</p>
-    </section>
+      <div class="recipe-info">
+        <h2>Pancakes</h2>
+        <p><strong>Category:</strong> Breakfast</p>
+        <p><strong>Cook Time:</strong> 15 min</p>
+      </div>
+    </article>
 
-    <section class="recipe-card" data-category="desserts" data-title="Chocolate Brownie" data-description="1. Melt chocolate and butter. 2. Mix in sugar and eggs. 3. Add flour and cocoa powder. 4. Pour into tray and bake at 180°C for 25–30 mins. 5. Cool before slicing.">
-      <h2>Chocolate Brownie</h2>
+    <!-- 🍫 Recipe Card -->
+    <article class="recipe-card"
+      data-category="desserts"
+      data-title="Chocolate Brownie"
+      data-description="1. Melt chocolate. 2. Mix ingredients. 3. Bake. 4. Cool.">
+
       <img src="brownie.jpg" alt="Chocolate Brownie" />
-      <p><strong>Category:</strong> Desserts</p>
-      <p><strong>Cook Time:</strong> 30 min</p>
-    </section>
+      <div class="recipe-info">
+        <h2>Chocolate Brownie</h2>
+        <p><strong>Category:</strong> Desserts</p>
+        <p><strong>Cook Time:</strong> 30 min</p>
+      </div>
+    </article>
+
   </main>
 
-  <section id="add-recipe">
-    <h2>Add Your Own Recipe</h2>
+  <!-- ➕ ADD RECIPE -->
+  <section id="add-recipe" class="form-section">
+    <h2>➕ Add Your Recipe</h2>
+
     <form id="recipe-form">
       <input type="text" id="title" placeholder="Recipe Title" required />
-      <input type="text" id="category" placeholder="Category (e.g. Breakfast)" required />
-      <input type="text" id="cooktime" placeholder="Cook Time (e.g. 30 min)" required />
+      <input type="text" id="category" placeholder="Category" required />
+      <input type="text" id="cooktime" placeholder="Cook Time" required />
       <input type="text" id="image" placeholder="Image URL" required />
-      <textarea id="description" placeholder="Recipe Instructions..." required></textarea>
+      <textarea id="description" placeholder="Instructions..." required></textarea>
+
       <button type="submit">Add Recipe</button>
     </form>
   </section>
 
-  <footer>
-    <p>&copy; 2025 Yummy Recipes. All rights reserved.</p>
-  </footer>
-
+  <!-- 📖 RECIPE MODAL -->
   <div id="recipe-modal" class="modal">
     <div class="modal-content">
       <span class="close-btn">&times;</span>
@@ -78,21 +115,27 @@
     </div>
   </div>
 
- 
-  <!-- Trigger Button -->
-<button id="open-ai-modal">AI Recipe Generator</button>
+  <!-- 🤖 AI MODAL -->
+  <div id="ai-recipe-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-ai-btn">&times;</span>
+      <h2>🤖 AI Recipe Generator</h2>
 
-<!-- AI Recipe Modal -->
-<div id="ai-recipe-modal" class="modal">
-  <div class="modal-content">
-    <span class="close-ai-btn">&times;</span>
-    <h2>AI Recipe Generator</h2>
-    <input type="text" id="ingredientInput" placeholder="Enter ingredients (e.g. tomato, cheese)" />
-    <button id="get-recipe-btn">Get Recipe</button>
-    <div id="recipeResult"></div>
+      <input type="text" id="ingredientInput"
+        placeholder="Enter ingredients (e.g. tomato, cheese)" />
+
+      <button id="get-recipe-btn">Generate Recipe</button>
+
+      <div id="recipeResult"></div>
+    </div>
   </div>
-</div>
 
-<script src="script.js"></script>
+  <!-- 🔻 FOOTER -->
+  <footer>
+    <p>&copy; 2025 Yummy Recipes | Made with ❤️</p>
+  </footer>
+
+  <script src="script.js"></script>
+
 </body>
 </html>
